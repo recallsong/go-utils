@@ -8,6 +8,7 @@ import (
 	"errors"
 	"fmt"
 	"reflect"
+	"time"
 
 	"github.com/recallsong/go-utils/conv"
 )
@@ -243,4 +244,9 @@ func (d Dic) GetMap(key string) (map[string]interface{}, error) {
 		return nil, err
 	}
 	return val.ToMap(), err
+}
+
+// GetDuration 根据key获取time.Duration类型的值，如果失败则返回defVal
+func (d Dic) GetDuration(key string, defVal time.Duration) time.Duration {
+	return conv.ToDuration(d[key], defVal)
 }

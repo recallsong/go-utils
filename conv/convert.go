@@ -3,6 +3,7 @@ package conv
 import (
 	"fmt"
 	"strconv"
+	"time"
 )
 
 // ToInt 将interface{}转换为int，失败则返回defVal
@@ -164,4 +165,43 @@ func ToString(obj interface{}) string {
 	default:
 		return fmt.Sprint(val)
 	}
+}
+
+// ToDuration 将interface{}转换为time.Duration，失败则返回defVal
+func ToDuration(obj interface{}, defVal time.Duration) time.Duration {
+	switch val := obj.(type) {
+	case time.Duration:
+		return val
+	case string:
+		d, err := time.ParseDuration(val)
+		if err != nil {
+			return defVal
+		}
+		return d
+	case int:
+		return time.Duration(val)
+	case int8:
+		return time.Duration(val)
+	case int16:
+		return time.Duration(val)
+	case int32:
+		return time.Duration(val)
+	case int64:
+		return time.Duration(val)
+	case uint:
+		return time.Duration(val)
+	case uint8:
+		return time.Duration(val)
+	case uint16:
+		return time.Duration(val)
+	case uint32:
+		return time.Duration(val)
+	case uint64:
+		return time.Duration(val)
+	case float32:
+		return time.Duration(val)
+	case float64:
+		return time.Duration(val)
+	}
+	return defVal
 }
