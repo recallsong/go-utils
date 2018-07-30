@@ -55,8 +55,8 @@ func (sg *ServeGroup) Serve(closeCh <-chan os.Signal, stopFn func(err error, key
 					delete(sg.serves, key)
 				}
 				sg.lock.Unlock()
-				sg.wg.Done()
 				stopFn(err, key, svr)
+				sg.wg.Done()
 				ch <- err
 			}()
 			err = svr.Serve()
