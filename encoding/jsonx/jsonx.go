@@ -1,6 +1,9 @@
 package jsonx
 
-import "encoding/json"
+import (
+	"bytes"
+	"encoding/json"
+)
 
 // Marshal 将interface{}类型的值转换成json字符串，失败将产生panic
 func Marshal(value interface{}) string {
@@ -23,4 +26,17 @@ func ToMap(str string) (map[string]interface{}, error) {
 		return nil, err
 	}
 	return out, err
+}
+
+func MarshalAndIntend(v interface{}) string {
+	b, err := json.Marshal(v)
+	if err != nil {
+		panic(err)
+	}
+	var out bytes.Buffer
+	err = json.Indent(&out, b, "", "\t")
+	if err != nil {
+		panic(err)
+	}
+	return out.String()
 }
