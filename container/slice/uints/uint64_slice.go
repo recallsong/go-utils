@@ -97,6 +97,8 @@ func (s *UiInt64s) Insert(index int, data ...uint64) {
 			if total > cp {
 				slice = make([]uint64, total)
 				copy(slice, *s)
+			} else {
+				slice = slice[0:total:cp]
 			}
 			if num > 0 {
 				copy(slice[index+num:], slice[index:])

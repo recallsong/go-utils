@@ -78,6 +78,8 @@ func (s *Interfaces) Insert(index int, data ...interface{}) {
 			if total > cp {
 				slice = make([]interface{}, total)
 				copy(slice, *s)
+			} else {
+				slice = slice[0:total:cp]
 			}
 			if num > 0 {
 				copy(slice[index+num:], slice[index:])

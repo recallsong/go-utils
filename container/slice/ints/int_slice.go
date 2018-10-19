@@ -97,6 +97,8 @@ func (s *Ints) Insert(index int, data ...int) {
 			if total > cp {
 				slice = make([]int, total)
 				copy(slice, *s)
+			} else {
+				slice = slice[0:total:cp]
 			}
 			if num > 0 {
 				copy(slice[index+num:], slice[index:])
