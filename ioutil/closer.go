@@ -11,9 +11,11 @@ func CloseMulti(cs ...io.Closer) error {
 	var errs errorx.Errors
 	var err error
 	for _, c := range cs {
-		err = c.Close()
-		if err != nil {
-			errs = append(errs, err)
+		if c != nil {
+			err = c.Close()
+			if err != nil {
+				errs = append(errs, err)
+			}
 		}
 	}
 	return errs
