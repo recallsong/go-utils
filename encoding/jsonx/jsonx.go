@@ -14,6 +14,7 @@ func Marshal(value interface{}) string {
 	return string(bytes)
 }
 
+// Unmarshal .
 func Unmarshal(str string, out interface{}) error {
 	return json.Unmarshal([]byte(str), out)
 }
@@ -28,6 +29,7 @@ func ToMap(str string) (map[string]interface{}, error) {
 	return out, err
 }
 
+// MarshalAndIntend .
 func MarshalAndIntend(v interface{}) string {
 	b, err := json.Marshal(v)
 	if err != nil {
@@ -39,4 +41,23 @@ func MarshalAndIntend(v interface{}) string {
 		panic(err)
 	}
 	return out.String()
+}
+
+// JSONBytes .
+type JSONBytes []byte
+
+// MarshalJSON .
+func (bs JSONBytes) MarshalJSON() ([]byte, error) {
+	return bs, nil
+}
+
+// UnmarshalJSON .
+func (bs *JSONBytes) UnmarshalJSON(b []byte) error {
+	*bs = b
+	return nil
+}
+
+// Unmarshal .
+func (bs JSONBytes) Unmarshal(out interface{}) error {
+	return json.Unmarshal([]byte(bs), out)
 }
