@@ -5,24 +5,6 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-// // EnableLogContext .
-// func EnableLogContext() {
-// 	logrus.AddHook(&LogContext{})
-// }
-
-// // LogContext .
-// type LogContext struct{}
-
-// // Levels .
-// func (lc *LogContext) Levels() []logrus.Level {
-// 	return logrus.AllLevels
-// }
-
-// // Fire .
-// func (lc *LogContext) Fire(*logrus.Entry) error {
-// 	return nil
-// }
-
 // Logger .
 type Logger struct {
 	name string
@@ -30,12 +12,38 @@ type Logger struct {
 }
 
 // New .
-func New(name string) logs.Logger {
-	return &Logger{name, logrus.StandardLogger().WithField("module", name)}
+func New(options ...interface{}) logs.Logger {
+	log := logrus.New()
+	log.SetFormatter(&logrus.TextFormatter{
+		ForceColors:     false,
+		FullTimestamp:   true,
+		TimestampFormat: "2006-01-02 15:04:05.000",
+	})
+	logger := &Logger{"", logrus.NewEntry(log)}
+	for _, opt := range options {
+		processOptions(logger, opt)
+	}
+	return logger
 }
 
 // Sub .
 func (l *Logger) Sub(name string) logs.Logger {
-	name = l.name + "." + name
+	if len(l.name) > 0 {
+		name = l.name + "." + name
+	}
 	return &Logger{name, l.Entry.WithField("module", name)}
+}
+
+func processOptions(logger *Logger, opt interface{}) {
+	switch option := opt.(type) {
+	case setNameOption:
+		logger.name = string(option)
+	}
+}
+
+type setNameOption string
+
+// WithName .
+func WithName(name string) interface{} {
+	return setNameOption(name)
 }
