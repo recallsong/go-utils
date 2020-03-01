@@ -38,7 +38,7 @@ func TestBytesFormat(t *testing.T) {
 
 	// EB
 	b = FormatBytes(math.MaxInt64)
-	assert.Equal(t, "8.00EB", b)
+	assert.Equal(t, "8EB", b)
 }
 
 func TestBytesParseErrors(t *testing.T) {
@@ -221,7 +221,7 @@ func TestBytesJSON(t *testing.T) {
 	}
 	data, err := json.Marshal(s)
 	if assert.NoError(t, err) {
-		assert.Equal(t, `{"bytes":"2.00KB"}`, string(data))
+		assert.Equal(t, `{"bytes":"2KB"}`, string(data))
 	}
 	s.Bytes = 0
 	err = json.Unmarshal(data, &s)
@@ -271,7 +271,7 @@ func TestBytesJSON(t *testing.T) {
 	*sp.Bytes = 8 * 1024
 	data, err = json.Marshal(sp)
 	if assert.NoError(t, err) {
-		assert.Equal(t, `{"bytes":"8.00KB"}`, string(data))
+		assert.Equal(t, `{"bytes":"8KB"}`, string(data))
 	}
 }
 
@@ -279,9 +279,9 @@ func TestBytesText(t *testing.T) {
 	var n Bytes = 2048
 	data, err := n.MarshalText()
 	if assert.NoError(t, err) {
-		assert.Equal(t, `2.00KB`, string(data))
+		assert.Equal(t, `2KB`, string(data))
 	}
-	err = n.UnmarshalText([]byte(`4.00KB`))
+	err = n.UnmarshalText([]byte(`4KB`))
 	if assert.NoError(t, err) {
 		assert.Equal(t, Bytes(4096), n)
 	}

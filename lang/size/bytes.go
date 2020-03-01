@@ -3,15 +3,18 @@ package size
 import (
 	"bytes"
 	"fmt"
+	"math"
 	"strconv"
 	"strings"
 
 	"github.com/recallsong/go-utils/reflectx"
 )
 
+// Bytes .
 type Bytes int64
 
 const (
+	// B ... Byte Unit
 	B = int64(1) << (10 * iota)
 	KB
 	MB
@@ -147,5 +150,24 @@ func FormatBytes(b int64) string {
 	default:
 		return strconv.FormatInt(int64(b), 10) + "B"
 	}
-	return fmt.Sprintf("%.2f%s", value, unit)
+	value = math.Round(value*100) / 100
+	text := strconv.FormatFloat(value, 'f', 2, 64)
+	idx := len(text)
+	i := idx - 1
+	for ; i >= 0; i-- {
+		if text[i] == '.' {
+			break
+		}
+		if text[i] == '0' {
+			idx--
+		}
+	}
+	if i >= 0 {
+		if text[idx-1] == '.' {
+			idx--
+		}
+		text = text[0:idx]
+	}
+	// text := fmt.Sprintf("%f%s", value, unit)
+	return text + unit
 }
