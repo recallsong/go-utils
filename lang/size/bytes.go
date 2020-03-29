@@ -3,7 +3,6 @@ package size
 import (
 	"bytes"
 	"fmt"
-	"math"
 	"strconv"
 	"strings"
 
@@ -150,7 +149,6 @@ func FormatBytes(b int64) string {
 	default:
 		return strconv.FormatInt(int64(b), 10) + "B"
 	}
-	value = math.Round(value*100) / 100
 	text := strconv.FormatFloat(value, 'f', 2, 64)
 	idx := len(text)
 	i := idx - 1
@@ -160,6 +158,8 @@ func FormatBytes(b int64) string {
 		}
 		if text[i] == '0' {
 			idx--
+		} else {
+			break
 		}
 	}
 	if i >= 0 {
