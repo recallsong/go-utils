@@ -18,7 +18,7 @@ var (
 
 // String 返回版本信息
 func String() string {
-	return fmt.Sprintf("Version: %s\nBuildTime: %s\nGoVersion: %s\nCommitID:%s\n",
+	return fmt.Sprintf("Version: %s\nBuildTime: %s\nGoVersion: %s\nCommitID: %s\n",
 		Version, BuildTime, GoVersion, CommitID)
 }
 
