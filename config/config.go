@@ -53,7 +53,7 @@ func EscapeEnv(contents []byte) []byte {
 		}
 		val, ok := os.LookupEnv(strings.TrimPrefix(reflectx.BytesToString(key), "$"))
 		if !ok {
-			if defval == nil && len(param[1]) <= 0 {
+			if len(param[1]) > 0 {
 				continue
 			}
 			val = string(defval)
