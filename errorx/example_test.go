@@ -25,11 +25,15 @@ func ExampleMultiError() {
 	errs := errorx.NewMultiError(err0, err1, err2)
 
 	fmt.Println(errs)
+
+	var empty errorx.Errors
+	fmt.Println(empty.MaybeUnwrap())
 	// Output:
 	// 3 error(s) occurred:
 	// * error 0
 	// * error 1
 	// * error 2
+	// <nil>
 }
 
 func ExampleCodedError() {
