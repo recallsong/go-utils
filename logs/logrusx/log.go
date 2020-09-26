@@ -12,7 +12,7 @@ type Logger struct {
 }
 
 // New .
-func New(options ...interface{}) logs.Logger {
+func New(options ...Option) logs.Logger {
 	log := logrus.New()
 	log.SetFormatter(&logrus.TextFormatter{
 		ForceColors:     false,
@@ -21,7 +21,7 @@ func New(options ...interface{}) logs.Logger {
 	})
 	logger := &Logger{"", logrus.NewEntry(log)}
 	for _, opt := range options {
-		processOptions(logger, opt)
+		processOptions(log, logger, opt.get())
 	}
 	return logger
 }
@@ -34,16 +34,32 @@ func (l *Logger) Sub(name string) logs.Logger {
 	return &Logger{name, l.Entry.WithField("module", name)}
 }
 
-func processOptions(logger *Logger, opt interface{}) {
-	switch option := opt.(type) {
+func processOptions(logr *logrus.Logger, logger *Logger, opt interface{}) {
+	switch val := opt.(type) {
 	case setNameOption:
-		logger.name = string(option)
+		logger.name = string(val)
+	case logrus.Level:
+		logr.SetLevel(val)
 	}
 }
+
+// Option .
+type Option interface {
+	get() interface{}
+}
+
+type option struct{ value interface{} }
+
+func (o *option) get() interface{} { return o.value }
 
 type setNameOption string
 
 // WithName .
-func WithName(name string) interface{} {
-	return setNameOption(name)
+func WithName(name string) Option {
+	return &option{setNameOption(name)}
+}
+
+// WithLevel .
+func WithLevel(level logrus.Level) Option {
+	return &option{level}
 }
