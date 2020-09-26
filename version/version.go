@@ -6,13 +6,13 @@ import (
 )
 
 var (
-	// 版本号
+	// Version 版本号
 	Version string
-	// 编译时间
+	// BuildTime 编译时间
 	BuildTime string
-	// 编译时间
+	// GoVersion go版本
 	GoVersion string
-	// 版本库中的提交版本
+	// CommitID 版本库中的提交版本
 	CommitID string
 )
 

@@ -62,7 +62,7 @@ func Example_convert() {
 	fmt.Println(conv.ToBool(val, false))
 	val = true
 	fmt.Println(conv.ToBool(val, false))
-	fmt.Println(conv.ToString(val))
+	fmt.Println(conv.String(val))
 
 	// Output:
 	// 123
