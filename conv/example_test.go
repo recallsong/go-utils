@@ -88,3 +88,15 @@ func Example_slice() {
 	// [1 2 3 4 5]
 	// [1 2 3 4 5]
 }
+
+func Example_formatFloat() {
+	// conv.CleanFloat("")
+	fmt.Println(conv.FormatFloat64(1.25678, 2))
+	fmt.Println(conv.FormatFloat64(1.02567, 2))
+	fmt.Println(conv.FormatFloat64(1.0000, 2))
+
+	// Output:
+	// 1.26
+	// 1.03
+	// 1
+}
