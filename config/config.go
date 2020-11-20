@@ -252,7 +252,7 @@ func LoadToMap(path string, c map[string]interface{}) error {
 }
 
 // LoadEnvFileWithPath .
-func LoadEnvFileWithPath(path string) {
+func LoadEnvFileWithPath(path string, override bool) {
 	byts, err := ioutil.ReadFile(path)
 	if err != nil {
 		if os.IsNotExist(err) {
@@ -279,7 +279,15 @@ func LoadEnvFileWithPath(path string) {
 			continue
 		}
 		val := strings.TrimSpace(line[idx+1:])
-		os.Setenv(key, val)
+		if override {
+			os.Setenv(key, val)
+		} else {
+			_, ok := os.LookupEnv(key)
+			if !ok {
+				os.Setenv(key, val)
+			}
+		}
+
 	}
 }
 
@@ -290,5 +298,5 @@ func LoadEnvFile() {
 		return
 	}
 	path := filepath.Join(wd, ".env")
-	LoadEnvFileWithPath(path)
+	LoadEnvFileWithPath(path, false)
 }
