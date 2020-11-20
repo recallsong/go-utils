@@ -251,14 +251,8 @@ func LoadToMap(path string, c map[string]interface{}) error {
 	return UnmarshalToMap(bytes.NewReader(byts), typ[1:], c)
 }
 
-// LoadEnvFile .
-func LoadEnvFile() {
-	regex := regexp.MustCompile(`\s+\#`)
-	wd, err := os.Getwd()
-	if err != nil {
-		return
-	}
-	path := filepath.Join(wd, ".env")
+// LoadEnvFileWithPath .
+func LoadEnvFileWithPath(path string) {
 	byts, err := ioutil.ReadFile(path)
 	if err != nil {
 		if os.IsNotExist(err) {
@@ -266,6 +260,7 @@ func LoadEnvFile() {
 		}
 		return
 	}
+	regex := regexp.MustCompile(`\s+\#`)
 	content := reflectx.BytesToString(byts)
 	for _, line := range strings.Split(content, "\n") {
 		if strings.HasPrefix(line, "#") {
@@ -286,4 +281,14 @@ func LoadEnvFile() {
 		val := strings.TrimSpace(line[idx+1:])
 		os.Setenv(key, val)
 	}
+}
+
+// LoadEnvFile .
+func LoadEnvFile() {
+	wd, err := os.Getwd()
+	if err != nil {
+		return
+	}
+	path := filepath.Join(wd, ".env")
+	LoadEnvFileWithPath(path)
 }
