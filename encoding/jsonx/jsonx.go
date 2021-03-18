@@ -29,11 +29,6 @@ func ToMap(str string) (map[string]interface{}, error) {
 	return out, err
 }
 
-// MarshalAndIntend deprcated ! Use MarshalAndIndent
-func MarshalAndIntend(v interface{}) string {
-	return MarshalAndIndent(v)
-}
-
 // MarshalAndIndent .
 func MarshalAndIndent(v interface{}) string {
 	b, err := json.Marshal(v)
