@@ -140,42 +140,31 @@ func UnmarshalToMap(in io.Reader, typ string, c map[string]interface{}) (err err
 	return nil
 }
 
-func insensitiviseMap(m map[string]interface{}) {
-	for key, val := range m {
-		switch val.(type) {
-		case map[interface{}]interface{}:
-			val, _ = toStringMap(val)
-			insensitiviseMap(val.(map[string]interface{}))
-		case map[string]interface{}:
-			insensitiviseMap(val.(map[string]interface{}))
-		}
-		lower := strings.ToLower(key)
-		if key != lower {
-			// remove old key (not lower-cased)
-			delete(m, key)
-		}
-		// update map
-		m[lower] = val
-	}
-}
-
-// toStringMap casts an interface to a map[string]interface{} type.
-func toStringMap(i interface{}) (map[string]interface{}, error) {
-	var m = map[string]interface{}{}
+func insensitiviseMap(i interface{}) interface{} {
 	switch v := i.(type) {
 	case map[interface{}]interface{}:
+		var m = map[string]interface{}{}
 		for k, val := range v {
-			m[fmt.Sprint(k)] = val
+			m[strings.ToLower(fmt.Sprint(k))] = insensitiviseMap(val)
 		}
-		return m, nil
+		return m
 	case map[string]interface{}:
-		return v, nil
-	case string:
-		err := json.Unmarshal(reflectx.StringToBytes(v), &m)
-		return m, err
-	default:
-		return m, fmt.Errorf("unable to cast %#v of type %T to map[string]interface{}", i, i)
+		for key, val := range v {
+			lower := strings.ToLower(key)
+			if key != lower {
+				// remove old key (not lower-cased)
+				delete(v, key)
+			}
+			// update map
+			v[lower] = insensitiviseMap(val)
+		}
+		return v
+	case []interface{}:
+		for i, item := range v {
+			v[i] = insensitiviseMap(item)
+		}
 	}
+	return i
 }
 
 // deepSearch scans deep maps, following the key indexes listed in the
