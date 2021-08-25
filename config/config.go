@@ -136,7 +136,7 @@ func UnmarshalToMap(in io.Reader, typ string, c map[string]interface{}) (err err
 			}
 		}
 	}
-	insensitiviseMap(c)
+	// insensitiviseMap(c)
 	return nil
 }
 
