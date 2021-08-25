@@ -14,10 +14,7 @@ import (
 	"github.com/hashicorp/hcl"
 	"github.com/magiconair/properties"
 	"github.com/mitchellh/mapstructure"
-	"github.com/pelletier/go-toml"
 	"github.com/recallsong/go-utils/reflectx"
-	"gopkg.in/ini.v1"
-	"gopkg.in/yaml.v2"
 )
 
 // TrimBOM .
@@ -136,32 +133,21 @@ func UnmarshalToMap(in io.Reader, typ string, c map[string]interface{}) (err err
 			}
 		}
 	}
-	insensitiviseMap(c)
+	toStringKeyMap(c)
 	return nil
 }
 
-func insensitiviseMap(i interface{}) interface{} {
-	switch v := i.(type) {
+func toStringKeyMap(i interface{}) interface{} {
+	switch x := i.(type) {
 	case map[interface{}]interface{}:
-		var m = map[string]interface{}{}
-		for k, val := range v {
-			m[strings.ToLower(fmt.Sprint(k))] = insensitiviseMap(val)
+		m := map[string]interface{}{}
+		for k, v := range x {
+			m[fmt.Sprint(k)] = toStringKeyMap(v)
 		}
 		return m
-	case map[string]interface{}:
-		for key, val := range v {
-			lower := strings.ToLower(key)
-			if key != lower {
-				// remove old key (not lower-cased)
-				delete(v, key)
-			}
-			// update map
-			v[lower] = insensitiviseMap(val)
-		}
-		return v
 	case []interface{}:
-		for i, item := range v {
-			v[i] = insensitiviseMap(item)
+		for i, v := range x {
+			x[i] = toStringKeyMap(v)
 		}
 	}
 	return i
