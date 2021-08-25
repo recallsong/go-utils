@@ -14,7 +14,10 @@ import (
 	"github.com/hashicorp/hcl"
 	"github.com/magiconair/properties"
 	"github.com/mitchellh/mapstructure"
+	"github.com/pelletier/go-toml"
 	"github.com/recallsong/go-utils/reflectx"
+	"gopkg.in/ini.v1"
+	"gopkg.in/yaml.v2"
 )
 
 // TrimBOM .
