@@ -148,6 +148,10 @@ func toStringKeyMap(i interface{}) interface{} {
 			m[fmt.Sprint(k)] = toStringKeyMap(v)
 		}
 		return m
+	case map[string]interface{}:
+		for k, v := range x {
+			x[k] = toStringKeyMap(v)
+		}
 	case []interface{}:
 		for i, v := range x {
 			x[i] = toStringKeyMap(v)
